@@ -1,18 +1,40 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Note from './Note/Note';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      notes: [
+        {id: 1, noteContent: 'Note 1 here'},
+        {id: 2, noteContent: 'Note 2 here'}
+      ],
+    }
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div className="notesWrapper">
+        <div className="notesHeader">
+          <div className="heading">
+            React & Firebase todo-app
+          </div>
+          <div className="notesBody">
+            {
+              this.state.notes.map((note) => {
+                return (
+                  <Note noteContent={note.noteContent}
+                    noteId={note.id} key={note.id} />
+                );
+              })
+            }
+          </div>
+          <div className="notesFooter">
+            Footer will go here...
+          </div>
+        </div>
       </div>
     );
   }
