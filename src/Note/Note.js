@@ -14,9 +14,8 @@ class Note extends Component{
 
   render(props){
     return(
-      <div className="note face-in">
-        <p className="noteContent">{this.props.noteContent}</p>
-
+      <div className="task">
+        <p className=" list-group-item">{this.props.noteContent}</p>
       </div>
     );
   }

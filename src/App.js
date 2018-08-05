@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Note from './Note/Note';
+import NoteForm from './NoteForm/NoteForm';
 
 class App extends Component {
   constructor(props){
@@ -16,23 +17,26 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="notesWrapper">
-        <div className="notesHeader">
-          <div className="heading">
+      <div className="container">
+        <div >
+          <div className="row title">
             React & Firebase todo-app
           </div>
-          <div className="notesBody">
+          <div className="row content">
+
+
             {
               this.state.notes.map((note) => {
                 return (
-                  <Note noteContent={note.noteContent}
+                  <Note class="" noteContent={note.noteContent}
                     noteId={note.id} key={note.id} />
                 );
               })
             }
+
           </div>
-          <div className="notesFooter">
-            Footer will go here...
+          <div className="row footer">
+            <NoteForm />
           </div>
         </div>
       </div>
