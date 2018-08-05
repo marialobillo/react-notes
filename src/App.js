@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Note from './Note/Note';
 import NoteForm from './NoteForm/NoteForm';
@@ -7,6 +6,7 @@ import NoteForm from './NoteForm/NoteForm';
 class App extends Component {
   constructor(props){
     super(props);
+    this.addNote = this.addNote.bind(this);
 
     this.state = {
       notes: [
@@ -14,6 +14,15 @@ class App extends Component {
         {id: 2, noteContent: 'Note 2 here'}
       ],
     }
+  }
+  addNote(note){
+    // push the note onto the notes array
+    const previousNote = this.state.notes;
+    previousNote.push({ id: previousNote.length + 1, noteContent: note });
+    
+    this.setState({
+      notes: previousNote
+    })
   }
   render() {
     return (
@@ -28,15 +37,19 @@ class App extends Component {
             {
               this.state.notes.map((note) => {
                 return (
-                  <Note class="" noteContent={note.noteContent}
-                    noteId={note.id} key={note.id} />
+                  <Note class=""
+                    noteContent={note.noteContent}
+                    noteId={note.id}
+                    key={note.id} />
                 );
               })
             }
 
           </div>
           <div className="row footer">
-            <NoteForm />
+            <NoteForm
+              addNote={this.addNote}
+            />
           </div>
         </div>
       </div>
