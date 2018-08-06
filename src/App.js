@@ -4,11 +4,13 @@ import Note from './Note/Note';
 import NoteForm from './NoteForm/NoteForm';
 import { DB_CONFIG } from './Config/config';
 import firebase from 'firebase';
+import 'firebase/database';
 
 class App extends Component {
   constructor(props){
     super(props);
     this.addNote = this.addNote.bind(this);
+    this.removeNote = this.removeNote.bind(this);
 
     this.app = firebase.initializeApp(DB_CONFIG);
     this.database = this.app.database().ref().child('notes');
@@ -19,24 +21,37 @@ class App extends Component {
   }
 
   componentWillMount(){
-    const previousNotes = this.state.note;
+    const previousNotes = this.state.notes;
 
     // DataSnapshot
     this.database.on('child_added', snap => {
+      console.log(previousNotes);
       previousNotes.push({
         id: snap.key,
         noteContent: snap.val().noteContent,
       })
+      this.setState({
+        notes: previousNotes
+      })
+    })
+    this.database.on('child_removed', snap => {
+      for(let i = 0; i < previousNotes.length; i++){
+        if(previousNotes[i].id === snap.key){
+          previousNotes.splice(i, 1);
+        }
+      }
+      this.setState({
+        notes: previousNotes
+      })
     })
   }
   addNote(note){
-    // push the note onto the notes array
-    const previousNote = this.state.notes;
-    previousNote.push({ id: previousNote.length + 1, noteContent: note });
+    this.database.push().set({ noteContent: note });
 
-    this.setState({
-      notes: previousNote
-    })
+  }
+  removeNote(noteId){
+    console.log('from the parent: ' + noteId );
+    this.database.child(noteId).remove();
   }
   render() {
     return (
@@ -54,7 +69,9 @@ class App extends Component {
                   <Note class=""
                     noteContent={note.noteContent}
                     noteId={note.id}
-                    key={note.id} />
+                    key={note.id}
+                    removeNote = {this.removeNote}
+                  />
                 );
               })
             }

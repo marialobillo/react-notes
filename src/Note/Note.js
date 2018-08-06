@@ -6,16 +6,23 @@ class Note extends Component{
 
   constructor(props){
     super(props);
-    this.state = {
-      noteContent: '',
-      noteId: 0
-    }
+    this.noteId = props.noteId;
+    this.noteContent = props.noteContent;
+    this.handleRemoveNote = this.handleRemoveNote().bind(this);
+    
+  }
+  handleRemoveNote(id){
+    this.props.removeNote(id);
   }
 
   render(props){
     return(
-      <div className="task">
-        <p className=" list-group-item">{this.props.noteContent}</p>
+      <div className="task row">
+        <p className=" list-group-item col-8">{this.noteContent}</p>
+        <button className="btn btn-danger btn-sm col-2"
+          onClick={() => this.handleRemoveNote(this.noteId)}>
+          X
+        </button>
       </div>
     );
   }
